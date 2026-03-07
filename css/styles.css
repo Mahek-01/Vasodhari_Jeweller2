@@ -1096,3 +1096,29 @@ p {
     }
 }
 
+
+/* ========================================
+   STARDUST SPARKLE EFFECT
+   ======================================== */
+.sparkle-particle {
+    position: fixed;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px rgba(212, 175, 55, 0.4);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    animation: stardust-float 1.5s ease-out forwards;
+}
+
+@keyframes stardust-float {
+    0% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        /* Drift upwards and slightly horizontally */
+        transform: translate(calc(-50% + var(--dx, 0)), calc(-50% + var(--dy, -20px))) scale(0.1);
+    }
+}

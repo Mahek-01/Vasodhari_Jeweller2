@@ -3,7 +3,7 @@
  * Interactive functionality for the jewelry shop website
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Initialize all components
     initHeader();
     initMobileMenu();
@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initTestimonialSlider();
     initContactForm();
     initScrollToTop();
+    initSparkleEffect();
 });
 
 /**
@@ -18,10 +19,10 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initHeader() {
     const header = document.querySelector('.header');
-    
+
     if (!header) return;
-    
-    window.addEventListener('scroll', function() {
+
+    window.addEventListener('scroll', function () {
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
         } else {
@@ -37,29 +38,29 @@ function initMobileMenu() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     if (!menuToggle || !navMenu) return;
-    
+
     // Toggle menu
-    menuToggle.addEventListener('click', function() {
+    menuToggle.addEventListener('click', function () {
         menuToggle.classList.toggle('active');
         navMenu.classList.toggle('active');
-        
+
         // Prevent body scroll when menu is open
         document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
     });
-    
+
     // Close menu when clicking on nav links
-    navLinks.forEach(function(link) {
-        link.addEventListener('click', function() {
+    navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
             menuToggle.classList.remove('active');
             navMenu.classList.remove('active');
             document.body.style.overflow = '';
         });
     });
-    
+
     // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
             menuToggle.classList.remove('active');
             navMenu.classList.remove('active');
@@ -73,25 +74,25 @@ function initMobileMenu() {
  */
 function initScrollAnimations() {
     const fadeElements = document.querySelectorAll('.fade-in');
-    
+
     if (!fadeElements.length) return;
-    
+
     const observerOptions = {
         root: null,
         rootMargin: '0px',
         threshold: 0.1
     };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
+
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
-    
-    fadeElements.forEach(function(el) {
+
+    fadeElements.forEach(function (el) {
         observer.observe(el);
     });
 }
@@ -102,63 +103,63 @@ function initScrollAnimations() {
 function initTestimonialSlider() {
     const track = document.querySelector('.testimonial-track');
     const dots = document.querySelectorAll('.dot');
-    
+
     if (!track || !dots.length) return;
-    
+
     let currentSlide = 0;
     const totalSlides = dots.length;
     let autoplayInterval;
-    
+
     function goToSlide(index) {
         currentSlide = index;
-        
+
         // Move track
         track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
-        
+
         // Update dots
-        dots.forEach(function(dot, i) {
+        dots.forEach(function (dot, i) {
             dot.classList.toggle('active', i === currentSlide);
         });
     }
-    
+
     function nextSlide() {
         const next = (currentSlide + 1) % totalSlides;
         goToSlide(next);
     }
-    
+
     function prevSlide() {
         const prev = (currentSlide - 1 + totalSlides) % totalSlides;
         goToSlide(prev);
     }
-    
+
     // Dot click handlers
-    dots.forEach(function(dot, index) {
-        dot.addEventListener('click', function() {
+    dots.forEach(function (dot, index) {
+        dot.addEventListener('click', function () {
             goToSlide(index);
             resetAutoplay();
         });
     });
-    
+
     // Autoplay
     function startAutoplay() {
         autoplayInterval = setInterval(nextSlide, 5000);
     }
-    
+
     function resetAutoplay() {
         clearInterval(autoplayInterval);
         startAutoplay();
     }
-    
+
     startAutoplay();
-    
+
     // Pause on hover
     const slider = document.querySelector('.testimonial-slider');
     if (slider) {
-        slider.addEventListener('mouseenter', function() {
+        slider.addEventListener('mouseenter', function () {
             clearInterval(autoplayInterval);
         });
-        
-        slider.addEventListener('mouseleave', function() {
+
+        slider.addEventListener('mouseleave', function () {
             startAutoplay();
         });
     }
@@ -170,20 +171,20 @@ function initTestimonialSlider() {
 function initContactForm() {
     const form = document.querySelector('.contact-form form');
     const successMessage = document.querySelector('.form-success');
-    
+
     if (!form) return;
-    
-    form.addEventListener('submit', function(e) {
+
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         // Get form values
         const name = form.querySelector('#name');
         const email = form.querySelector('#email');
         const message = form.querySelector('#message');
-        
+
         // Validation flags
         let isValid = true;
-        
+
         // Validate name
         if (!name.value.trim()) {
             showError(name, 'Name is required');
@@ -191,7 +192,7 @@ function initContactForm() {
         } else {
             clearError(name);
         }
-        
+
         // Validate email
         if (!email.value.trim()) {
             showError(email, 'Email is required');
@@ -202,7 +203,7 @@ function initContactForm() {
         } else {
             clearError(email);
         }
-        
+
         // Validate message
         if (!message.value.trim()) {
             showError(message, 'Message is required');
@@ -210,37 +211,37 @@ function initContactForm() {
         } else {
             clearError(message);
         }
-        
+
         // If valid, show success message
         if (isValid) {
             if (successMessage) {
                 successMessage.classList.add('show');
             }
-            
+
             // Reset form
             form.reset();
-            
+
             // Hide success message after 5 seconds
-            setTimeout(function() {
+            setTimeout(function () {
                 if (successMessage) {
                     successMessage.classList.remove('show');
                 }
             }, 5000);
         }
     });
-    
+
     // Real-time validation on input
     const inputs = form.querySelectorAll('input, textarea');
-    inputs.forEach(function(input) {
-        input.addEventListener('input', function() {
+    inputs.forEach(function (input) {
+        input.addEventListener('input', function () {
             clearError(input);
         });
     });
-    
+
     function showError(input, message) {
         const formGroup = input.closest('.form-group');
         let errorEl = formGroup.querySelector('.error-message');
-        
+
         if (!errorEl) {
             errorEl = document.createElement('span');
             errorEl.className = 'error-message';
@@ -250,22 +251,22 @@ function initContactForm() {
             errorEl.style.marginTop = '5px';
             formGroup.appendChild(errorEl);
         }
-        
+
         errorEl.textContent = message;
         input.style.borderColor = '#ff6b6b';
     }
-    
+
     function clearError(input) {
         const formGroup = input.closest('.form-group');
         const errorEl = formGroup.querySelector('.error-message');
-        
+
         if (errorEl) {
             errorEl.remove();
         }
-        
+
         input.style.borderColor = 'rgba(255, 255, 255, 0.1)';
     }
-    
+
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
@@ -277,20 +278,20 @@ function initContactForm() {
  */
 function initScrollToTop() {
     const scrollBtn = document.querySelector('.scroll-to-top');
-    
+
     if (!scrollBtn) return;
-    
+
     // Show/hide button on scroll
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         if (window.scrollY > 500) {
             scrollBtn.classList.add('visible');
         } else {
             scrollBtn.classList.remove('visible');
         }
     });
-    
+
     // Scroll to top on click
-    scrollBtn.addEventListener('click', function() {
+    scrollBtn.addEventListener('click', function () {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -301,17 +302,17 @@ function initScrollToTop() {
 /**
  * Smooth scroll for navigation links (fallback for older browsers)
  */
-document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-    anchor.addEventListener('click', function(e) {
+document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+    anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
-        
+
         if (href === '#') return;
-        
+
         const target = document.querySelector(href);
-        
+
         if (target) {
             e.preventDefault();
-            
+
             target.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
@@ -324,8 +325,8 @@ document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
  * Lazy loading for images
  */
 if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
+    const imageObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 if (img.dataset.src) {
@@ -336,9 +337,62 @@ if ('IntersectionObserver' in window) {
             }
         });
     });
-    
-    document.querySelectorAll('img[data-src]').forEach(function(img) {
+
+    document.querySelectorAll('img[data-src]').forEach(function (img) {
         imageObserver.observe(img);
     });
 }
 
+
+/**
+ * Stardust Sparkle Effect on Mouse Movement
+ */
+function initSparkleEffect() {
+    let lastSparkleTime = 0;
+    const throttleTime = 40; // Frequency of sparkles
+
+    document.addEventListener('mousemove', function (e) {
+        const now = Date.now();
+        if (now - lastSparkleTime < throttleTime) return;
+        lastSparkleTime = now;
+
+        // Random chance to skip some for a more sporadic, elegant look
+        if (Math.random() > 0.6) return;
+
+        // Only run if the cursor isn't over an interactable element where it looks cluttered
+        // const isInteractable = e.target.closest('a, button, input'); // optional check
+
+        createSparkle(e.clientX, e.clientY);
+    });
+
+    function createSparkle(x, y) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle-particle';
+
+        // Offset starting position slightly around cursor for a wider trail
+        const offsetX = (Math.random() - 0.5) * 15;
+        const offsetY = (Math.random() - 0.5) * 15;
+
+        // Set CSS custom properties for drift directions
+        const dx = (Math.random() - 0.5) * 30; // Float left or right
+        const dy = -(Math.random() * 30 + 10); // Float up
+
+        sparkle.style.setProperty('--dx', dx + 'px');
+        sparkle.style.setProperty('--dy', dy + 'px');
+
+        // Vary size slightly
+        const size = Math.random() * 2 + 1; // 1px to 3px
+        sparkle.style.width = size + 'px';
+        sparkle.style.height = size + 'px';
+
+        sparkle.style.left = (x + offsetX) + 'px';
+        sparkle.style.top = (y + offsetY) + 'px';
+
+        document.body.appendChild(sparkle);
+
+        // Remove element after animation completes
+        setTimeout(function () {
+            sparkle.remove();
+        }, 1500); // Must match CSS animation duration
+    }
+}
